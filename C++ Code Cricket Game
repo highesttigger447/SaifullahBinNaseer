@@ -1,0 +1,246 @@
+/**
+ * HAND CRICKET GAME
+ * Dev-C++ Compatible Standard C++ Application
+ */
+
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <limits>
+#include <string>
+
+using namespace std;
+
+// ==========================================
+// FUNCTION PROTOTYPES
+// ==========================================
+void clearInputBuffer();
+int getValidInput(int min, int max, string prompt);
+void setupMatch(int &overs, int &wickets);
+bool performToss();
+int playInning(string batter, string bowler, int overs, int wickets, int targetScore);
+void displayCommentary(int runs, bool isWicket);
+
+// ==========================================
+// MAIN FUNCTION
+// ==========================================
+int main() {
+    // Seed the random number generator using current system time
+    srand(static_cast<unsigned int>(time(0)));
+
+    cout << "=========================================\n";
+    cout << "          WELCOME TO HAND CRICKET        \n";
+    cout << "=========================================\n\n";
+
+    int overs = 0, wickets = 0;
+    
+    // 1. Setup Match (Overs and Wickets)
+    setupMatch(overs, wickets);
+
+    // 2. Toss Phase
+    bool userBatsFirst = performToss();
+
+    int userScore = 0;
+    int compScore = 0;
+
+    // 3. Match Execution
+    if (userBatsFirst) {
+        cout << "\n=========================================\n";
+        cout << "   FIRST INNINGS: YOU ARE BATTING        \n";
+        cout << "=========================================\n";
+        userScore = playInning("Player", "Computer", overs, wickets, -1); // -1 means no target yet
+        
+        cout << "\n=========================================\n";
+        cout << "   SECOND INNINGS: COMPUTER IS BATTING   \n";
+        cout << "   Target to win: " << (userScore + 1) << " runs.\n";
+        cout << "=========================================\n";
+        compScore = playInning("Computer", "Player", overs, wickets, userScore + 1);
+    } else {
+        cout << "\n=========================================\n";
+        cout << "   FIRST INNINGS: COMPUTER IS BATTING    \n";
+        cout << "=========================================\n";
+        compScore = playInning("Computer", "Player", overs, wickets, -1);
+        
+        cout << "\n=========================================\n";
+        cout << "   SECOND INNINGS: YOU ARE BATTING       \n";
+        cout << "   Target to win: " << (compScore + 1) << " runs.\n";
+        cout << "=========================================\n";
+        userScore = playInning("Player", "Computer", overs, wickets, compScore + 1);
+    }
+
+    // 4. Result Calculation
+    cout << "\n=========================================\n";
+    cout << "               MATCH RESULT              \n";
+    cout << "=========================================\n";
+    cout << "Your Total Score:     " << userScore << endl;
+    cout << "Computer Total Score: " << compScore << endl;
+
+    if (userScore > compScore) {
+        cout << "\n🏆 CONGRATULATIONS! YOU WON THE MATCH! 🏆\n";
+    } else if (compScore > userScore) {
+        cout << "\n💻 COMPUTER WINS! Better luck next time.\n";
+    } else {
+        cout << "\n🤝 IT'S A TIE! A thrilling finish.\n";
+    }
+
+    cout << "\nThank you for playing!\n";
+    return 0;
+}
+
+// ==========================================
+// UTILITY FUNCTIONS
+// ==========================================
+
+/**
+ * Clears the input buffer to handle invalid data types (like letters instead of numbers)
+ */
+void clearInputBuffer() {
+    cin.clear(); // Clear the error flag
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Discard invalid input
+}
+
+/**
+ * Ensures the user only enters numbers within the specific limits
+ * Re-prompts continuously until a valid number is given
+ */
+int getValidInput(int min, int max, string prompt) {
+    int choice;
+    while (true) {
+        cout << prompt;
+        cin >> choice;
+        
+        if (cin.fail() || choice < min || choice > max) {
+            clearInputBuffer();
+            cout << "Invalid input! Please enter a number between " << min << " and " << max << ".\n";
+        } else {
+            return choice;
+        }
+    }
+}
+
+/**
+ * Gets the rules for the match from the user
+ */
+void setupMatch(int &overs, int &wickets) {
+    overs = getValidInput(1, 50, "Enter Number of Overs (1 to 50): ");
+    wickets = getValidInput(1, 11, "Enter Number of Wickets (1 to 11): ");
+    cout << "\nMatch set for " << overs << " over(s) and " << wickets << " wicket(s).\n";
+}
+
+/**
+ * Simulates the Toss phase
+ * Returns true if Player bats first, false if Computer bats first
+ */
+bool performToss() {
+    cout << "\n--- TOSS TIME ---\n";
+    int userCall = getValidInput(1, 2, "Call the Toss -> (1) Heads or (2) Tails: ");
+    
+    // Generate random 1 or 2
+    int coinToss = (rand() % 2) + 1; 
+    
+    string tossResult = (coinToss == 1) ? "Heads" : "Tails";
+    cout << "Coin landed on... " << tossResult << "!\n";
+
+    if (userCall == coinToss) {
+        cout << "You won the toss!\n";
+        int decision = getValidInput(1, 2, "Choose action -> (1) Bat or (2) Bowl: ");
+        return (decision == 1);
+    } else {
+        cout << "Computer won the toss!\n";
+        int compDecision = (rand() % 2) + 1;
+        if (compDecision == 1) {
+            cout << "Computer chooses to BAT first.\n";
+            return false;
+        } else {
+            cout << "Computer chooses to BOWL first.\n";
+            return true;
+        }
+    }
+}
+
+/**
+ * Displays dynamic commentary based on the outcome of the ball
+ */
+void displayCommentary(int runs, bool isWicket) {
+    if (isWicket) {
+        const string wicketComments[] = {
+            "BOWLED HIM! Cleaned up the stumps!",
+            "CAUGHT! Right in the hands of the fielder.",
+            "LBW! Dead straight, the umpire raises the finger."
+        };
+        cout << "🔴 WICKET! " << wicketComments[rand() % 3] << "\n";
+        return;
+    }
+
+    cout << "🟢 ";
+    switch (runs) {
+        case 0: cout << "Solid defense. No run."; break;
+        case 1: cout << "Tapped away into the gap for a quick single."; break;
+        case 2: cout << "Good running between the wickets! They get two."; break;
+        case 3: cout << "Pushed through the covers, they pull back for three."; break;
+        case 4: cout << "CRACKING SHOT! One bounce over the ropes for FOUR!"; break;
+        case 5: cout << "Five runs! Extra runs due to an overthrow."; break;
+        case 6: cout << "MASSIVE HIT! That's out of the park for a SIX!"; break;
+        default: cout << "Ran hard."; break;
+    }
+    cout << "\n";
+}
+
+/**
+ * Executes a single inning loop
+ * Returns the final score of the batting team
+ */
+int playInning(string batter, string bowler, int overs, int wickets, int targetScore) {
+    int maxBalls = overs * 6;
+    int currentScore = 0;
+    int currentWickets = 0;
+    int ballsBowled = 0;
+
+    while (ballsBowled < maxBalls && currentWickets < wickets) {
+        int overNumber = ballsBowled / 6;
+        int ballNumber = (ballsBowled % 6) + 1;
+        
+        cout << "\n[Over " << overNumber << "." << ballNumber << " | Score: " 
+             << currentScore << "/" << currentWickets << "]\n";
+             
+        if (targetScore != -1) {
+             cout << "Target: " << targetScore << " (Needs " 
+                  << (targetScore - currentScore) << " runs in " 
+                  << (maxBalls - ballsBowled) << " balls)\n";
+        }
+
+        // Get Player and Computer inputs
+        int playerInput = getValidInput(1, 6, "Enter a number (1-6): ");
+        int compInput = (rand() % 6) + 1;
+        
+        cout << "You chose: " << playerInput << " | Computer chose: " << compInput << "\n";
+
+        // Check for Wicket (Numbers Match)
+        if (playerInput == compInput) {
+            currentWickets++;
+            displayCommentary(0, true);
+        } else {
+            // Runs scored (Depends on who is batting)
+            int runsScored = (batter == "Player") ? playerInput : compInput;
+            currentScore += runsScored;
+            displayCommentary(runsScored, false);
+        }
+
+        ballsBowled++;
+
+        // End inning immediately if target is reached
+        if (targetScore != -1 && currentScore >= targetScore) {
+            cout << "\n🎯 TARGET ACHIEVED! " << batter << " successfully chased the score.\n";
+            break;
+        }
+    }
+
+    if (currentWickets == wickets) {
+        cout << "\nALL OUT! " << batter << " lost all their wickets.\n";
+    } else if (ballsBowled == maxBalls && currentScore < targetScore) {
+        cout << "\nOVERS FINISHED! " << batter << " ran out of balls.\n";
+    }
+
+    cout << "=> End of Innings. " << batter << " scored " << currentScore << " runs.\n";
+    return currentScore;
+}
