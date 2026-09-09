@@ -1,0 +1,611 @@
+🏏 Hand Cricket Game — C++
+
+A simple console-based Hand Cricket Game developed in C++ using the Dev-C++ IDE.
+
+The game follows basic hand-cricket rules where the player and computer select numbers from 1 to 6. If both numbers are the same, the batter is considered OUT. Otherwise, the selected batting number is added to the batter's score.
+
+The project is designed for beginners and demonstrates the use of functions, loops, conditional statements, random number generation, input validation, and basic game logic.
+
+🎮 Game Features
+🏏 Console-based hand cricket gameplay
+🎲 Random number generation from 1 to 6
+⌨️ Player input restricted to 1–6
+❌ Invalid inputs are rejected and the ball is replayed
+💬 Ball-by-ball commentary
+🪙 Head/Tails toss before the match
+👤 Player can choose:
+Number of overs
+Number of wickets
+🤖 Computer-controlled batting and bowling
+🏃 Score calculation for every valid ball
+🏏 Wicket occurs when the batter's number matches the bowler's number
+🔄 Innings automatically changes after the first team's dismissal
+🏆 Final score comparison determines the winner
+📊 Displays scores, wickets, overs, and match result
+🛠️ Development Environment
+Requirement	Details
+Language	C++
+IDE	Dev-C++
+Application Type	Console Application
+Compiler	GCC / MinGW
+Platform	Windows
+Input	Keyboard
+Output	Console
+📜 Hand Cricket Rules
+
+The game uses a simplified version of traditional hand cricket.
+
+Batting
+
+During every ball:
+
+The batter chooses a number between 1 and 6.
+The bowler also generates/selects a number between 1 and 6.
+If the two numbers are different, the batter scores the number they selected.
+If the two numbers are the same, the batter is OUT.
+Example
+Player chooses: 4
+Computer chooses: 2
+
+Player scores: 4 runs
+
+
+Another example:
+
+Player chooses: 5
+Computer chooses: 5
+
+OUT!
+
+
+The innings ends when:
+
+The selected number of wickets is reached, or
+The selected number of overs is completed, or
+The chasing team reaches the target score.
+🪙 Toss System
+
+Before the match begins, a toss is performed.
+
+The player can select:
+
+1. Heads
+2. Tails
+
+
+The computer then randomly generates either Heads or Tails.
+
+For example:
+
+Choose your toss:
+1. Heads
+2. Tails
+
+Enter choice: 1
+
+You selected: Heads
+Computer selected: Tails
+
+You lost the toss.
+Computer will decide to bat or bowl.
+
+
+The toss determines which team gets the first opportunity to choose the innings/batting order according to the game's implementation.
+
+⚙️ Match Setup
+
+At the beginning of the game, the player is asked to enter the match settings.
+
+Example:
+
+Enter number of overs: 5
+Enter number of wickets: 2
+
+
+These values determine the maximum duration of an innings.
+
+The program should validate these inputs so that invalid match settings are not accepted.
+
+🎲 Random Number Generation
+
+The game uses C++ random number generation to generate values between 1 and 6.
+
+A typical implementation can use:
+
+rand() % 6 + 1;
+
+
+The random generator is used for the computer's number selection and the toss.
+
+A random seed should be initialized at the beginning of the program so that the computer does not produce the same sequence every time the program runs.
+
+For example:
+
+srand(time(0));
+
+
+Required headers may include:
+
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+
+⌨️ Input Validation
+
+The player's ball input must be between 1 and 6.
+
+Valid input:
+
+Enter your number: 4
+
+
+Invalid input:
+
+Enter your number: 9
+Invalid input! Please enter a number between 1 and 6.
+Try again for this ball.
+
+
+The invalid input should not count as a ball.
+
+The player gets another opportunity to enter a valid number for the same delivery.
+
+The same validation approach should be used wherever appropriate for menu selections such as the toss.
+
+💬 Commentary
+
+The game should provide simple commentary after every ball to make the console experience more interactive.
+
+Example:
+
+Over 1.2
+
+You played: 4
+Computer played: 2
+
+Commentary: That's a good shot!
+Runs scored: 4
+
+Current Score: 12/0
+
+
+When the batter is dismissed:
+
+You played: 5
+Computer played: 5
+
+Commentary: OUT! The numbers match!
+The batter has been dismissed.
+
+
+Possible commentary messages can include:
+
+"Nice shot!"
+"Good running!"
+"That's a big hit!"
+"Well bowled!"
+"Dot ball!"
+"Excellent delivery!"
+"OUT! The numbers match!"
+
+🏏 Innings System
+
+The match consists of two innings.
+
+First Innings
+
+The team that bats first attempts to score as many runs as possible.
+
+Example:
+
+PLAYER INNINGS
+
+Score: 24/1
+Overs: 3.4
+
+
+The innings ends when the team reaches the maximum overs, loses all available wickets, or the relevant game condition ends the innings.
+
+Second Innings
+
+The other team then bats and attempts to score more runs than the first team.
+
+If the second team reaches the target:
+
+Computer needs 25 runs to win.
+
+Current Score: 26/1
+
+Computer wins!
+
+
+If the second team finishes below the target:
+
+Final Score: 23/2
+
+Player wins by 1 run!
+
+🤖 Computer Gameplay
+
+When the computer is batting, it automatically generates a number between 1 and 6 for every ball.
+
+The player acts as the bowler and enters a number between 1 and 6.
+
+Example:
+
+Computer is batting.
+
+Enter your bowling number (1-6): 3
+
+Computer played: 5
+You bowled: 3
+
+Computer scores 5 runs.
+
+
+If the numbers match:
+
+Computer played: 4
+You bowled: 4
+
+OUT!
+
+Computer has lost a wicket.
+
+🧮 Score Calculation
+
+For every valid delivery:
+
+If playerNumber != computerNumber:
+    batterScore += batterNumber
+
+
+If the numbers match:
+
+If playerNumber == computerNumber:
+    batter is OUT
+
+
+The score should be displayed throughout the innings.
+
+Example:
+
+Score: 35/1
+Overs: 4.2
+
+
+Where:
+
+35 = runs
+1 = wickets lost
+4.2 = 4 overs and 2 balls
+⏱️ Overs and Balls
+
+One over consists of 6 valid balls.
+
+For example:
+
+Over 1.1
+Over 1.2
+Over 1.3
+Over 1.4
+Over 1.5
+Over 1.6
+
+
+After six valid deliveries:
+
+End of Over 1
+Score: 18/0
+
+
+Invalid player input does not count as a delivery.
+
+Therefore:
+
+Invalid input → retry
+Valid input → ball counts
+
+🏆 Match Result
+
+After both innings have finished, the program compares the scores.
+
+Possible results include:
+
+Player Wins
+Player Score: 42
+Computer Score: 37
+
+Congratulations!
+You won the match by 5 runs.
+
+Computer Wins
+Player Score: 35
+Computer Score: 36
+
+Computer wins by 1 run.
+Better luck next time!
+
+Tie
+Player Score: 40
+Computer Score: 40
+
+The match is a TIE!
+
+🧩 Suggested Program Structure
+
+The program should be divided into separate functions instead of putting the entire game inside main().
+
+A possible structure is:
+
+int generateRandomNumber();
+
+int getValidInput();
+
+int performToss();
+
+void displayCommentary();
+
+void playPlayerInnings();
+
+void playComputerInnings();
+
+void displayScore();
+
+void displayMatchResult();
+
+int main();
+
+
+The exact function names can be changed depending on the implementation.
+
+📁 Suggested Project Structure
+
+A simple Dev-C++ project can contain:
+
+HandCricket/
+│
+├── HandCricket.cpp
+├── README.md
+└── HandCricket.dev
+
+Files
+
+HandCricket.cpp
+
+Contains the complete C++ source code.
+
+README.md
+
+Contains project documentation, rules, setup instructions, and gameplay information.
+
+HandCricket.dev
+
+Dev-C++ project file generated by the IDE.
+
+🧱 Recommended Coding Practices
+
+The project should follow basic C++ coding conventions.
+
+Meaningful Names
+
+Use descriptive names such as:
+
+playerScore
+computerScore
+playerChoice
+computerChoice
+totalOvers
+totalWickets
+currentOver
+currentBall
+
+
+Avoid unclear names such as:
+
+x
+a
+b
+n
+temp1
+
+Constants
+
+Important fixed values can be represented using constants:
+
+const int MIN_NUMBER = 1;
+const int MAX_NUMBER = 6;
+const int BALLS_PER_OVER = 6;
+
+
+This makes the program easier to understand and modify.
+
+Functions
+
+Separate major tasks into functions.
+
+For example:
+
+getValidInput()
+
+
+can handle player input validation, while:
+
+generateRandomNumber()
+
+
+can handle random number generation.
+
+📝 Comments
+
+Comments should be used to explain the purpose of important sections of the program.
+
+Example:
+
+// Generate a random number between 1 and 6
+int generateRandomNumber()
+{
+    return rand() % 6 + 1;
+}
+
+
+Another example:
+
+// Check whether the batter is out.
+// In hand cricket, matching numbers mean dismissal.
+if (playerChoice == computerChoice)
+{
+    wickets++;
+}
+
+
+Comments should explain why something is being done rather than unnecessarily describing every individual line.
+
+▶️ How to Run the Project
+Install Dev-C++.
+Open the Dev-C++ project.
+Open the .cpp source file.
+Compile the program.
+Fix any compiler errors if they occur.
+Run the program.
+Follow the instructions displayed in the console.
+
+A typical startup could look like:
+
+=================================
+       HAND CRICKET GAME
+=================================
+
+Enter number of overs: 5
+Enter number of wickets: 2
+
+----------- TOSS -----------
+
+1. Heads
+2. Tails
+
+Enter your choice: 1
+
+🔄 Basic Game Flow
+START
+  |
+  v
+Display Game Title
+  |
+  v
+Enter Overs & Wickets
+  |
+  v
+Perform Toss
+  |
+  v
+Determine Batting Order
+  |
+  v
+First Innings
+  |
+  +----> Generate/Enter Number
+  |          |
+  |          v
+  |      Validate Input
+  |          |
+  |       Invalid?
+  |       /     \
+  |     Yes      No
+  |      |        |
+  |    Retry      v
+  |             Compare Numbers
+  |                |
+  |        +-------+-------+
+  |        |               |
+  |      Same          Different
+  |        |               |
+  |       OUT          Add Runs
+  |        |               |
+  |        +-------+-------+
+  |                |
+  |             Next Ball
+  |                |
+  |          6 Balls = Over
+  |
+  v
+Second Innings
+  |
+  v
+Compare Scores
+  |
+  v
+Display Winner
+  |
+  v
+END
+
+📌 Important Implementation Requirements
+
+The final C++ implementation should ensure that:
+
+The game runs in a standard Dev-C++ C++ console environment.
+Player numbers are restricted to 1–6.
+Invalid ball inputs produce an error message.
+Invalid ball inputs cause the same ball to be retried.
+Invalid inputs do not increase the ball count.
+Computer numbers are randomly generated from 1–6.
+Matching numbers result in a wicket.
+Different numbers add the batter's selected number to the score.
+The player can select the number of overs.
+The player can select the number of wickets.
+A toss is performed before the innings.
+Toss selection uses:
+1 = Heads
+2 = Tails
+The computer's toss result is randomly generated.
+Both teams get an innings.
+The second innings can use the first innings score as the target.
+The program displays useful commentary.
+The code uses functions rather than putting all logic in main().
+Meaningful variable and function names are used.
+Comments explain the major sections of the program.
+The final result clearly identifies the winner or a tie.
+🚀 Possible Future Improvements
+
+The project can later be expanded with:
+
+Difficulty levels
+Multiple computer batting strategies
+Different commentary for different scores
+Player names
+Team names
+Multiple players
+Tournament mode
+Match statistics
+Highest score tracking
+Best-of-three matches
+Colored console output
+Sound effects
+Improved menu system
+Save/load game functionality
+Graphical user interface
+📄 License
+
+This project is intended for educational and personal use.
+
+You are free to modify the source code, add features, and use the project as a learning exercise for C++ programming.
+
+👨‍💻 Project Summary
+
+Hand Cricket Game is a beginner-friendly C++ console project that demonstrates fundamental programming concepts through an interactive cricket game.
+
+The project combines:
+
+Variables
+Input/output
+if/else statements
+Loops
+Functions
+Random number generation
+Input validation
+Game state management
+Score calculation
+Basic modular programming
+
+The main goal is to provide a simple but complete example of how fundamental C++ concepts can be combined to create an interactive console game in Dev-C++.
